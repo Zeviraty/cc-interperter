@@ -66,7 +66,7 @@ def scantoken(chars):
     global Errors
     c = chars.next()
     if c == None:
-        return TokenType.EOF
+        return (TokenType.EOF,None)
     if c == "\n":
         Line += 1
         return ""
