@@ -158,9 +158,9 @@ def main():
                 continue
             if token.name == "NUMBER":
                 if full[2] == False:
-                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
+                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {float(data)}")
                 else:
-                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
+                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {float(data)}")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
