@@ -1,6 +1,7 @@
 import sys
 from enum import Enum
 from collections import deque
+from decimal import Decimal
 
 global Errors
 Errors = []
@@ -101,12 +102,12 @@ def scantoken(chars):
                 break
             if c == ".":
                 if has_decimal:
-                    return (TokenType.NUMBER, float(building),True)
+                    return (TokenType.NUMBER, Decimal(building),True)
             c = chars.next()
             if c == ".":
                 has_decimal = True
             building += c
-        return (TokenType.NUMBER, float(building),False)
+        return (TokenType.NUMBER, Decimal(building),False)
     if c == '/':
         next_c = chars.peek()
         if next_c == '/':
