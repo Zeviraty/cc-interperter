@@ -18,6 +18,7 @@ class TokenType(Enum):
     MINUS         = "-"
     STAR          = "*"
     BANG_EQUAL    = "!="
+    BANG          = "!"
     EQUAL_EQUAL   = "=="
     EQUAL         = "="
     LESS_EQUAL    = "<="
