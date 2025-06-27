@@ -2,6 +2,9 @@ import sys
 from enum import Enum
 from collections import deque
 
+global Errors = []
+global Line = 0
+
 class TokenType(Enum):
     LEFT_PAREN = "("
     RIGHT_PAREN = ")"
@@ -21,6 +24,12 @@ class TokenType(Enum):
     SLASH = "/"
     DOT = "."
     EOF = None
+
+    @classmethod
+    def _missing_(cls, value):
+        global Errors
+        print(cls)
+        Errors.append((Line,value))
 
 class LookaheadIterator:
     def __init__(self, iterable):
@@ -53,7 +62,8 @@ def scantoken(chars):
         next_c = chars.peek()
         if next_c == '=':
             c += chars.next()
-    return TokenType(c)
+    ttype = TokenType(c)
+    
 
 def main():
     if len(sys.argv) < 3:
