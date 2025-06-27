@@ -76,7 +76,7 @@ def main():
         while token != TokenType.EOF:
             token = scantoken(chars)
             if token != "":
-                print(f"{token.name} {token.value} null")
+                print(f"{token.name} {token.value if token.value != None else ""} null")
     else:
         print("EOF  null")
 
