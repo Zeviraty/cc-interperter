@@ -101,12 +101,12 @@ def scantoken(chars):
                 break
             if c == ".":
                 if has_decimal:
-                    return (TokenType.NUMBER, float(building))
+                    return (TokenType.NUMBER, float(building),True)
             c = chars.next()
             if c == ".":
                 has_decimal = True
             building += c
-        return (TokenType.NUMBER, float(building))
+        return (TokenType.NUMBER, float(building),False)
     if c == '/':
         next_c = chars.peek()
         if next_c == '/':
@@ -156,7 +156,10 @@ def main():
                 print(f"STRING \"{data}\" {data}")
                 continue
             if token.name == "NUMBER":
-                print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
+                if full[2] == False:
+                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
+                else:
+                    print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
