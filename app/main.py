@@ -29,6 +29,7 @@ class TokenType(Enum):
     DOT           = "."
     EOF           = None
     ERROR         = "ERROR"
+    STRING        = "MODULAR"
 
     @classmethod
     def _missing_(cls, value):
@@ -36,7 +37,8 @@ class TokenType(Enum):
         Errors.append((Line,value,ErrorType.UNEXPECTED))
 
 class ErrorType(Enum):
-    UNEXPECTED = 0
+    UNEXPECTED          = 0
+    UNTERMINATED_STRING = 1
 
 class LookaheadIterator:
     def __init__(self, iterable):
@@ -61,6 +63,7 @@ class LookaheadIterator:
 
 def scantoken(chars):
     global Line
+    global Errors
     c = chars.next()
     if c == None:
         return TokenType.EOF
@@ -73,6 +76,16 @@ def scantoken(chars):
             c += chars.next()
     if c == " " or c == "\t":
         return ""
+    if c == '"':
+        building = ""
+        while True:
+            c = chars.next()
+            if c == '"':
+                return (TokenType.STRING,building)
+            elif c == None:
+                Errors.append((Line,None,ErrorType.UNTERMINATED_STRING))
+            else:
+                building += c
     if c == '/':
         next_c = chars.peek()
         if next_c == '/':
@@ -80,9 +93,9 @@ def scantoken(chars):
             Line += 1
             return ""
     try:
-        return TokenType(c)
+        return (TokenType(c),None)
     except:
-        return TokenType.ERROR
+        return (TokenType.ERROR,None)
 
 def main():
     global Errors
@@ -111,8 +124,15 @@ def main():
         for error in Errors:
             if error[2].name == "UNEXPECTED":
                 print(f"[line {error[0]}] Error: Unexpected character: {error[1]}",file=sys.stderr)
-        for token in Tokens:
+            if error[2].name == "UNTERMINATED_STRING":
+                print(f"[line {error[0]}] Error: Unterminated string.",file=sys.stderr)
+        for full in Tokens:
+            token = full[0]
+            data = full[1]
             if token.name == "ERROR":
+                continue
+            if token.name == "STRING":
+                print("STRING \"{data}\" {data}")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
