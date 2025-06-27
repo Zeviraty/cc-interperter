@@ -118,6 +118,8 @@ def scantoken(chars):
     try:
         return (TokenType(c),None)
     except:
+        if c == None:
+            return (TokenType.EOF,None)
         if c not in "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
             return (TokenType.ERROR,None)
         building = c
