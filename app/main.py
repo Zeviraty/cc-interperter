@@ -128,7 +128,7 @@ def scantoken(chars):
             if c == None:
                 return (TokenType.IDENTIFIER,"")
             c = chars.next()
-            if c in (" ","\t","\n"):
+            if c not in "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
                 return (TokenType.IDENTIFIER,building)
             building += c
         return (TokenType.ERROR,None)
