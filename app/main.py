@@ -100,7 +100,7 @@ def main():
                 Tokens.append(token)
         for error in Errors:
             if error[2].name == "UNEXPECTED":
-                print(f"[line {error[0]}] Error: Unexpected character: {error[1]}")
+                print(f"[line {error[0]}] Error: Unexpected character: {error[1]}"file=sys.stderr)
         for token in Tokens:
             if token.name == "ERROR":
                 continue
