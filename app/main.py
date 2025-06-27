@@ -75,6 +75,7 @@ def scantoken(chars):
         next_c = chars.peek()
         if next_c == '/':
             while chars.next() not in ("\n",None): pass
+            return ""
     try:
         return TokenType(c)
     except:
