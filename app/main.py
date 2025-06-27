@@ -69,13 +69,13 @@ def scantoken(chars):
         return (TokenType.EOF,None)
     if c == "\n":
         Line += 1
-        return ""
+        return ("",None)
     if c in "!=<>":
         next_c = chars.peek()
         if next_c == '=':
             c += chars.next()
     if c == " " or c == "\t":
-        return ""
+        return ("",None)
     if c == '"':
         building = ""
         while True:
@@ -84,6 +84,11 @@ def scantoken(chars):
                 return (TokenType.STRING,building)
             elif c == None:
                 Errors.append((Line,None,ErrorType.UNTERMINATED_STRING))
+                return (TokenType.EOF,None)
+            elif c == "\n":
+                Errors.append((Line,None,ErrorType.UNTERMINATED_STRING))
+                Line += 1
+                return ("",None)
             else:
                 building += c
     if c == '/':
@@ -91,7 +96,7 @@ def scantoken(chars):
         if next_c == '/':
             while chars.next() not in ("\n",None): pass
             Line += 1
-            return ""
+            return ("",None)
     try:
         return (TokenType(c),None)
     except:
@@ -116,10 +121,10 @@ def main():
 
     if file_contents:
         Tokens = []
-        token = None
-        while token != TokenType.EOF:
+        token = [None,None]
+        while token[0] != TokenType.EOF:
             token = scantoken(chars)
-            if token != "":
+            if token[0] != "":
                 Tokens.append(token)
         for error in Errors:
             if error[2].name == "UNEXPECTED":
@@ -132,7 +137,7 @@ def main():
             if token.name == "ERROR":
                 continue
             if token.name == "STRING":
-                print("STRING \"{data}\" {data}")
+                print(f"STRING \"{data}\" {data}")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
