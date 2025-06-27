@@ -115,9 +115,12 @@ def scantoken(chars):
             while chars.next() not in ("\n",None): pass
             Line += 1
             return ("",None)
-    try:
-        return (TokenType(c),None)
-    except:
+    if c in list(TokenType):
+        try:
+            return (TokenType(c),None)
+        except:
+            pass
+    else:
         if c == None:
             return (TokenType.EOF,None)
         if c not in "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
