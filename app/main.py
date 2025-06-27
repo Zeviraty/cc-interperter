@@ -124,8 +124,11 @@ def scantoken(chars):
             return (TokenType.ERROR,None)
         building = c
         while True:
+            c = chars.peek()
+            if c == None:
+                return (TokenType.IDENTIFIER,"")
             c = chars.next()
-            if c in " \t\n":
+            if c in (" ","\t","\n"):
                 return (TokenType.IDENTIFIER,building)
             building += c
         return (TokenType.ERROR,None)
