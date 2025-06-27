@@ -71,7 +71,7 @@ def scantoken(chars):
         next_c = chars.peek()
         if next_c == '=':
             c += chars.next()
-    if c == " " or c == "   ":
+    if c == " " or c == "\t":
         return ""
     if c == '/':
         next_c = chars.peek()
