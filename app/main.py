@@ -32,6 +32,7 @@ class TokenType(Enum):
     ERROR         = "ERROR"
     STRING        = "STRINGDATA"
     NUMBER        = "NUMBERDATA"
+    IDENTIFIER    = "IDENTITYDATA"
 
     @classmethod
     def _missing_(cls, value):
@@ -117,6 +118,14 @@ def scantoken(chars):
     try:
         return (TokenType(c),None)
     except:
+        if c not in "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
+            return (TokenType.ERROR,None)
+        building = c
+        while True:
+            c = chars.next()
+            if c in " \t\n":
+                return (TokenType.IDENTIFIER,building)
+            building += c
         return (TokenType.ERROR,None)
 
 def main():
@@ -161,6 +170,9 @@ def main():
                     print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {float(data)}")
                 else:
                     print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {float(data)}")
+                continue
+            if token.name == "IDENTIFIER":
+                print(f"IDENTIFIER {data} null")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
