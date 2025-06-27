@@ -5,7 +5,7 @@ from collections import deque
 global Errors
 Errors = []
 global Line
-Line = 0
+Line = 1
 
 class TokenType(Enum):
     LEFT_PAREN = "("
