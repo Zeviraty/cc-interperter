@@ -29,7 +29,8 @@ class TokenType(Enum):
     DOT           = "."
     EOF           = None
     ERROR         = "ERROR"
-    STRING        = "MODULAR"
+    STRING        = "STRINGDATA"
+    NUMBER        = "NUMBERDATA"
 
     @classmethod
     def _missing_(cls, value):
@@ -91,6 +92,21 @@ def scantoken(chars):
                 return ("",None)
             else:
                 building += c
+    if c.isdigit():
+        building = c
+        has_decimal = False
+        while True:
+            c = chars.peek()
+            if c is None or not (c.isdigit() or (c == "." and not has_decimal)):
+                break
+            if c == ".":
+                if has_decimal:
+                    return (TokenType.NUMBER, float(building))
+            c = chars.next()
+            if c == ".":
+                has_decimal = True
+            building += c
+        return (TokenType.NUMBER, float(building))
     if c == '/':
         next_c = chars.peek()
         if next_c == '/':
@@ -138,6 +154,9 @@ def main():
                 continue
             if token.name == "STRING":
                 print(f"STRING \"{data}\" {data}")
+                continue
+            if token.name == "NUMBER":
+                print(f"NUMBER {data if not str(data).endswith('.0') else int(data)} {data}")
                 continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
