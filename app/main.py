@@ -8,25 +8,26 @@ global Line
 Line = 1
 
 class TokenType(Enum):
-    LEFT_PAREN = "("
-    RIGHT_PAREN = ")"
-    LEFT_BRACE = "{"
-    RIGHT_BRACE = "}"
-    SEMICOLON = ";"
-    COMMA = ","
-    PLUS = "+"
-    MINUS = "-"
-    STAR = "*"
-    BANG_EQUAL = "!="
-    EQUAL_EQUAL = "=="
-    LESS_EQUAL = "<="
+    LEFT_PAREN    = "("
+    RIGHT_PAREN   = ")"
+    LEFT_BRACE    = "{"
+    RIGHT_BRACE   = "}"
+    SEMICOLON     = ";"
+    COMMA         = ","
+    PLUS          = "+"
+    MINUS         = "-"
+    STAR          = "*"
+    BANG_EQUAL    = "!="
+    EQUAL_EQUAL   = "=="
+    EQUAL         = "="
+    LESS_EQUAL    = "<="
     GREATER_EQUAL = ">="
-    LESS = "<"
-    GREATER = ">"
-    SLASH = "/"
-    DOT = "."
-    EOF = None
-    ERROR = "ERROR"
+    LESS          = "<"
+    GREATER       = ">"
+    SLASH         = "/"
+    DOT           = "."
+    EOF           = None
+    ERROR         = "ERROR"
 
     @classmethod
     def _missing_(cls, value):
