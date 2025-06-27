@@ -2,8 +2,10 @@ import sys
 from enum import Enum
 from collections import deque
 
-global Errors = []
-global Line = 0
+global Errors
+Errors = []
+global Line
+Line = 0
 
 class TokenType(Enum):
     LEFT_PAREN = "("
@@ -24,12 +26,15 @@ class TokenType(Enum):
     SLASH = "/"
     DOT = "."
     EOF = None
+    ERROR = "ERROR"
 
     @classmethod
     def _missing_(cls, value):
         global Errors
-        print(cls)
-        Errors.append((Line,value))
+        Errors.append((Line,value,ErrorType.UNEXPECTED))
+
+class ErrorType(Enum):
+    UNEXPECTED = 0
 
 class LookaheadIterator:
     def __init__(self, iterable):
@@ -53,19 +58,24 @@ class LookaheadIterator:
             return None
 
 def scantoken(chars):
+    global Line
     c = chars.next()
     if c == None:
         return TokenType.EOF
     if c == "\n":
+        Line += 1
         return ""
     if c in "!=<>":
         next_c = chars.peek()
         if next_c == '=':
             c += chars.next()
-    ttype = TokenType(c)
-    
+    try:
+        return TokenType(c)
+    except:
+        return TokenType.ERROR
 
 def main():
+    global Errors
     if len(sys.argv) < 3:
         print("Usage: ./your_program.sh tokenize <filename>", file=sys.stderr)
         exit(1)
@@ -82,11 +92,17 @@ def main():
         chars = LookaheadIterator(file_contents)
 
     if file_contents:
+        Tokens = []
         token = None
         while token != TokenType.EOF:
             token = scantoken(chars)
             if token != "":
-                print(f"{token.name} {token.value if token.value != None else ""} null")
+                Tokens.append(token)
+        for error in Errors:
+            if error[2].name == "UNEXPECTED":
+                print(f"[line {error[0]}] Error: Unexpected character: {error[1]}")
+        for token in Tokens:
+            print(f"{token.name} {token.value if token.value != None else ''} null")
     else:
         print("EOF  null")
 
