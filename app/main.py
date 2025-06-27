@@ -102,6 +102,8 @@ def main():
             if error[2].name == "UNEXPECTED":
                 print(f"[line {error[0]}] Error: Unexpected character: {error[1]}")
         for token in Tokens:
+            if token.name == "ERROR":
+                continue
             print(f"{token.name} {token.value if token.value != None else ''} null")
         if len(Errors) != 0:
             exit(65)
